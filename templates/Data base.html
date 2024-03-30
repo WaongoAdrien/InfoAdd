@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Database Example</title>
+</head>
+<body>
+    <h1>Simple Database Example</h1>
+
+    <input type="text" id="nameInput" placeholder="Enter name">
+    <button onclick="saveData()">Save</button>
+
+    <ul id="dataList"></ul>
+
+    <script>
+        function saveData() {
+            var name = document.getElementById('nameInput').value;
+            if (name) {
+                var data = JSON.parse(localStorage.getItem('userData')) || [];
+                data.push(name);
+                localStorage.setItem('userData', JSON.stringify(data));
+                displayData();
+            }
+        }
+
+        function displayData() {
+            var dataList = document.getElementById('dataList');
+            dataList.innerHTML = '';
+            var data = JSON.parse(localStorage.getItem('userData')) || [];
+            data.forEach(function(name) {
+                var li = document.createElement('li');
+                li.textContent = name;
+                dataList.appendChild(li);
+            });
+        }
+
+        displayData();
+    </script>
+</body>
+</html>

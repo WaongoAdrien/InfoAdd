@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Add User</title>
+      <style>
+         body {
+         font-family: Arial, sans-serif;
+         margin: 0;
+         padding: 0;
+         background-color: #f4f4f4;
+         }
+         h1 {
+         color: #333;
+         text-align: center;
+         }
+         form {
+         max-width: 400px;
+         margin: 0 auto;
+         background-color: #fff;
+         padding: 20px;
+         border-radius: 5px;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+         }
+         label {
+         display: block;
+         margin-bottom: 5px;
+         color: #555;
+         }
+         input[type="text"],
+         input[type="email"],
+         input[type="number"] {
+         width: 100%;
+         padding: 10px;
+         margin-bottom: 15px;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         box-sizing: border-box;
+         }
+         input[type="submit"] {
+         background-color: #007bff;
+         color: #fff;
+         border: none;
+         padding: 10px 20px;
+         cursor: pointer;
+         border-radius: 5px;
+         }
+         input[type="submit"]:hover {
+         background-color: #0056b3;
+         }
+         /* CSS for delete button */
+         button[type="submit"] {
+         background-color: #3399ff; /* Blue background color */
+         color: white; /* White text color */
+         cursor: pointer; /* Change cursor to pointer */
+         padding: 8px 11px; /* Adjust padding for larger size */
+         border: none; /* Remove border */
+         border-radius: 5px; /* Add border-radius for rounded corners */
+         font-size: 16px; /* Adjust font size */
+         }
+         /* CSS for hover effect */
+         button[type="submit"]:hover {
+         background-color: #0056b3;  /* Darker blue background color on hover */
+         }
+         h4 {
+         text-align: center;
+         }
+      </style>
+   </head>
+   <body>
+      <hr>
+      <h1>ADD USER</h1>
+      {% if 'Email' in message %}
+      <h4 style="color:red">{{ message }}</h4>
+      {% else %}
+      <h4 style="color:green">{{ message }}</h4>
+      {% endif %}
+      <form action="/add_user" method="post">
+         <label for="name">First Name:</label>
+         <input type="text" id="name" name="name" required><br><br>
+         <label for="lastname">Last Name:</label>
+         <input type="text" id="lastname" name="lastname" required><br><br>
+         <label for="email">Email:</label>
+         <input type="email" id="email" name="email" required><br><br>
+         <label for="age">Age:</label>
+         <input type="number" id="age" name="age" required><br><br>
+         <input type="submit" value="Add User">
+      </form>
+      <h1>DELETE USER {{user_id}}</h1>
+      {% if 'No' in message2 %}
+      <h4 style="color:red">{{ message2 }}</h4>
+      {% else %}
+      <h4 style="color:green">{{ message2 }}</h4>
+      {% endif %}
+      <form action="/delete_user" method="POST">
+         <label for="id">Enter ID of user to delete:</label>
+         <input type="number" id="id" name="id" required><br>
+         <button type="submit">Delete User</button>
+      </form>
+      <br>
+      <br>
+      <br>
+   </body>
+</html>
