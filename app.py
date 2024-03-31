@@ -16,9 +16,10 @@ def get_db_connection():
 def create_table():
     conn = get_db_connection()
     cur = conn.cursor()
-    """cur.execute(
-        'DROP TABLE soldiers'
-    )"""
+    cur.execute(
+        """DROP TABLE IF EXISTS SOLDIERS"""
+    )
+
     cur.execute("""
         
         CREATE TABLE IF NOT EXISTS Soldiers (
@@ -27,7 +28,7 @@ def create_table():
             lastname TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
             age INTEGER NOT NULL,
-            army TEXT NOT NULL,
+            air_assault TEXT NOT NULL,
             unit TEXT NOT NULL
         );
     """)
@@ -51,7 +52,7 @@ def add_user():
         lastname = request.form['lastname']
         email = request.form['email']
         age = request.form['age']
-        army = request.form['army']
+        air_assault = request.form['air_assault']
         unit = request.form['unit']
 
         conn = get_db_connection()
@@ -65,18 +66,18 @@ def add_user():
             conn.close()
             message = f"User with Email: {email} already exists!"
             return render_template('index.html', message=message)
-        elif int(age) <= 18:
+        elif int(age) < 18:
             conn.close()
             message = "Age must be greater than 18!"
             return render_template('index.html', message=message)
-        elif army == "":
+        elif air_assault == "":
             conn.close()
             message = "Please make a selection for Army Status"
             return render_template('index.html', message=message)
         else:
             # Email does not exist, proceed to add user
-            conn.execute('INSERT INTO Soldiers (name, lastname, email, age, army, unit) VALUES (?, ?, ?, ?, ?,?)',
-                         (name, lastname, email, age, army, unit))
+            conn.execute('INSERT INTO Soldiers (name, lastname, email, age, air_assault, unit) VALUES (?, ?, ?, ?, ?,?)',
+                         (name, lastname, email, age, air_assault, unit))
             conn.commit()
             # Check if email already exists
             cursor = conn.execute('SELECT name FROM Soldiers WHERE email = ?', (email,))
