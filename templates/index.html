@@ -4,21 +4,23 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Add User</title>
+      <link rel="stylesheet" href="styles.css">
       <style>
          body {
          font-family: Arial, sans-serif;
          margin: 0;
          padding: 0;
-         background-color: #f4f4f4;
+         background-color: black;
+         color: beige;
          }
          h1 {
-         color: #333;
          text-align: center;
          }
          form {
+         text-align: center;
          max-width: 400px;
          margin: 0 auto;
-         background-color: #fff;
+         background-color: grey;
          padding: 20px;
          border-radius: 5px;
          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -26,17 +28,18 @@
          label {
          display: block;
          margin-bottom: 5px;
-         color: #555;
+
          }
          input[type="text"],
          input[type="email"],
          input[type="number"] {
-         width: 100%;
-         padding: 10px;
+         width: 75%;
+         padding: 5px;
          margin-bottom: 15px;
          border: 1px solid #ccc;
          border-radius: 5px;
          box-sizing: border-box;
+         background-color:beige;
          }
          input[type="submit"] {
          background-color: #007bff;
@@ -45,6 +48,7 @@
          padding: 10px 20px;
          cursor: pointer;
          border-radius: 5px;
+         font-size: 16px;
          }
          input[type="submit"]:hover {
          background-color: #0056b3;
@@ -54,7 +58,7 @@
          background-color: #3399ff; /* Blue background color */
          color: white; /* White text color */
          cursor: pointer; /* Change cursor to pointer */
-         padding: 8px 11px; /* Adjust padding for larger size */
+         padding: 10px 20px; /* Adjust padding for larger size */
          border: none; /* Remove border */
          border-radius: 5px; /* Add border-radius for rounded corners */
          font-size: 16px; /* Adjust font size */
@@ -66,26 +70,70 @@
          h4 {
          text-align: center;
          }
+        /* Styling for select element */
+        select{
+            width: 75%; /* Adjust the width as needed */
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            background-color:beige;
+        }
+
+        /* Hover effect */
+        select:hover {
+            border-color: blue;
+        }
+        hr {
+         border: none;
+         border-top: 10px solid beige; /* Black border color */
+         margin: 10px 0; /* Adjust margin as needed */
+         color:beige;
+         }
+
       </style>
+
    </head>
    <body>
       <hr>
       <h1>ADD USER</h1>
       {% if 'Email' in message %}
       <h4 style="color:red">{{ message }}</h4>
+      {% elif 'Age' in message %}
+      <h4 style="color:red">{{ message }}</h4>
+      {% elif 'Army' in message %}
+      <h4 style="color:red">{{ message }}</h4>
       {% else %}
       <h4 style="color:green">{{ message }}</h4>
       {% endif %}
       <form action="/add_user" method="post">
          <label for="name">First Name:</label>
-         <input type="text" id="name" name="name" required><br><br>
+         <input type="text" id="name" name="name" required><br>
          <label for="lastname">Last Name:</label>
-         <input type="text" id="lastname" name="lastname" required><br><br>
+         <input type="text" id="lastname" name="lastname" required><br>
          <label for="email">Email:</label>
-         <input type="email" id="email" name="email" required><br><br>
+         <input type="email" id="email" name="email" required><br>
          <label for="age">Age:</label>
-         <input type="number" id="age" name="age" required><br><br>
+         <input type="number" id="age" name="age" required><br>
+
+         <label for="army">Are you in the army?</label>
+         <select id="army" name="army" required>
+            <option value=""></option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+         </select><br><br>
+
+         <label for="unit">Select Your Company</label>
+         <select id="unit" name="unit" required>
+            <option value=""></option>
+            <option value="594th">594th TC</option>
+            <option value="541th">541st TC</option>
+            <option value="95thTC">95th TC</option>
+         </select><br><br>
          <input type="submit" value="Add User">
+
+
       </form>
       <h1>DELETE USER {{user_id}}</h1>
       {% if 'No' in message2 %}
