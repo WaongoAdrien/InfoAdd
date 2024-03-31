@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
+
 import sqlite3
 
 app = Flask(__name__)
@@ -15,13 +16,19 @@ def get_db_connection():
 def create_table():
     conn = get_db_connection()
     cur = conn.cursor()
+    cur.execute(
+        'DROP TABLE soldiers'
+    )
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS family (
+        
+        CREATE TABLE IF NOT EXISTS Soldiers (
             id INTEGER PRIMARY KEY,
             name TEXT NOT NULL,
             lastname TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
-            age INTEGER NOT NULL
+            age INTEGER NOT NULL,
+            army TEXT NOT NULL,
+            unit TEXT NOT NULL
         );
     """)
     conn.commit()
@@ -44,11 +51,13 @@ def add_user():
         lastname = request.form['lastname']
         email = request.form['email']
         age = request.form['age']
+        army = request.form['army']
+        unit = request.form['unit']
 
         conn = get_db_connection()
 
         # Check if email already exists
-        cursor = conn.execute('SELECT id FROM family WHERE email = ?', (email,))
+        cursor = conn.execute('SELECT id FROM Soldiers WHERE email = ?', (email,))
         existing_user = cursor.fetchone()
 
         if existing_user:
@@ -56,16 +65,24 @@ def add_user():
             conn.close()
             message = f"User with Email: {email} already exists!"
             return render_template('index.html', message=message)
+        elif int(age) <= 18:
+            conn.close()
+            message = "Age must be greater than 18!"
+            return render_template('index.html', message=message)
+        elif army == "":
+            conn.close()
+            message = "Please make a selection for Army Status"
+            return render_template('index.html', message=message)
         else:
             # Email does not exist, proceed to add user
-            conn.execute('INSERT INTO family (name, lastname, email, age) VALUES (?, ?, ?, ?)',
-                         (name, lastname, email, age))
+            conn.execute('INSERT INTO Soldiers (name, lastname, email, age, army, unit) VALUES (?, ?, ?, ?, ?,?)',
+                         (name, lastname, email, age, army, unit))
             conn.commit()
             # Check if email already exists
-            cursor = conn.execute('SELECT name FROM family WHERE email = ?', (email,))
+            cursor = conn.execute('SELECT name FROM Soldiers WHERE email = ?', (email,))
             user = cursor.fetchone()
 
-            cursor = conn.execute('SELECT id FROM family WHERE email = ?', (email,))
+            cursor = conn.execute('SELECT id FROM Soldiers WHERE email = ?', (email,))
             user_id = cursor.fetchone()
 
             conn.close()
@@ -81,11 +98,11 @@ def delete_user():
     if request.method == 'POST':
         user_id = request.form['id']
         conn = get_db_connection()
-        cursor = conn.execute('SELECT * FROM family WHERE id = ?', (user_id,))
+        cursor = conn.execute('SELECT * FROM Soldiers WHERE id = ?', (user_id,))
         user = cursor.fetchone()
 
         if user:
-            conn.execute('DELETE FROM family WHERE id = ?', (user_id,))
+            conn.execute('DELETE FROM Soldiers WHERE id = ?', (user_id,))
             conn.commit()
             conn.close()
             message2 = f"User with ID: {user_id} deleted successfully!"
@@ -96,3 +113,5 @@ def delete_user():
             return render_template('index.html', message2=message2, user_id=user_id)
 
 
+if __name__ == '__main__':
+    app.run(debug=True)
